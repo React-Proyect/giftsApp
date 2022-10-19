@@ -1,13 +1,16 @@
 <div class="row">
-    <div *ngFor="let resultado of resultados" class="col-md-4 col-sm-6 | animate__animated animate__fadeIn">
-        <div class="card">
+    <div *ngFor="let resultado of resultados" class="col-xl-3 col-md-4 col-sm-6 | mb-3 |  animate__animated animate__fadeIn">
+        <div class="card | shadow">
             <img
+                height="200px"
                 [src]="resultado.images.downsized_medium.url"
                 [alt]="resultado.title"
                 class="card-img-top"
             />
             <div class="card-body">
-                <p class="card-text">{{ resultado.title }}</p>
+                <p class="card-text">{{
+                    resultado.title.length <= 20 ?
+                        resultado.title :  resultado.title.slice(0,20) +'...'}}</p>
             </div>
         </div>
     </div>

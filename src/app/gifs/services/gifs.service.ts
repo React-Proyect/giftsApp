@@ -20,15 +20,15 @@ export class GifsService {
     constructor(
         private _http: HttpClient
     ) {
-        if(localStorage.getItem('historial') &&
-        localStorage.getItem('resultados')){
+        if (localStorage.getItem('historial') &&
+            localStorage.getItem('resultados')) {
             this._historial = JSON.parse(localStorage.getItem('historial')!);
             this.resultados = JSON.parse(localStorage.getItem('resultados')!);
         }
     }
 
 
-    public buscarGifs(query: string) {
+    public async buscarGifs(query: string) {
         query = query.trim().toLowerCase();
         if (!this._historial.includes(query)) {
             this._historial.unshift(query);
@@ -37,16 +37,22 @@ export class GifsService {
             localStorage.setItem('historial', JSON.stringify(this.historial));
         }
 
-        const params = new HttpParams()
-        .set('api_key', this._apiKey)
-        .set('limit', '10')
-        .set('q', query);
+        this.resultados = await this.apiSearch(query);
+        this.resultados && localStorage.setItem('resultados', JSON.stringify(this.resultados));
+    }
 
-        this._http.get<SearchGifsResponse>(`${this._api}/search`, {params}).subscribe(
-            (res) => {
-                this.resultados = res.data;
-                localStorage.setItem('resultados', JSON.stringify(this.resultados));
-            }
-        );
+    apiSearch(query: string): Promise<Gif[]> {
+        const params = new HttpParams()
+            .set('api_key', this._apiKey)
+            .set('limit', '12')
+            .set('q', query);
+        return new Promise<Gif[]>((resolve, reject) => {
+            this._http.get<SearchGifsResponse>(`${this._api}/search`, { params }).subscribe(
+                {
+                    next: (res) => res.data.length > 0 ? resolve(res.data) : resolve([]),
+                    error: () => resolve([])
+                }
+            );
+        })
     }
 }
