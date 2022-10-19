@@ -7,7 +7,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Deployment GitHub Pages
+## Deployment GitHub Pages 🚀 
 - npm install **angular-cli-ghpages --save**
 - ng deploy **--base-href=https://react-proyect.github.io/giftsApp/**
 
